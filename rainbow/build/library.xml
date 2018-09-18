@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="library" basedir="." default="library">
+
+	<property name="libfile" value="../lib/rainbow.userlibraries" />
+
+	<!-- 生成rainbow library 文件 -->
+	<macrodef name="importlib">
+		<attribute name="entry" />
+		<sequential>
+			<local name="result" />
+			<pathconvert property="result" pathsep="&#13;&#10;">
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*" to="        &lt;archive path=&quot;/rainbow/@{entry}/*&quot; /&gt;" />
+				</chainedmapper>
+				<fileset dir="../@{entry}" includes="*.jar" erroronmissingdir="no" />
+			</pathconvert>
+			<echo file="${libfile}" encoding="UTF-8" append="true">${result}&#13;&#10;</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="importlib_src">
+		<attribute name="entry" />
+		<sequential>
+			<local name="result" />
+			<pathconvert property="result" pathsep="&#13;&#10;">
+				<chainedmapper>
+					<flattenmapper />
+					<firstmatchmapper>
+						<regexpmapper from="core.jar" to="        &lt;archive path=&quot;/rainbow/lib/core.jar&quot; source=&quot;/rainbow/lib/core.jar&quot; /&gt;" />
+						<regexpmapper from="^(.*).jar$$" to="        &lt;archive path=&quot;/rainbow/@{entry}/\1.jar&quot; source=&quot;/rainbow/@{entry}/src/\1-sources.jar&quot; /&gt;" />
+					</firstmatchmapper>
+				</chainedmapper>
+				<fileset dir="../@{entry}" includes="*.jar" />
+			</pathconvert>
+			<echo file="${libfile}" encoding="UTF-8" append="true">${result}&#13;&#10;</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="library" description="make Rainbow Library Import file">
+		<echo file="${libfile}" encoding="UTF-8"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>]]>&#13;&#10;</echo>
+		<echo file="${libfile}" encoding="UTF-8" append="true"><![CDATA[<eclipse-userlibraries version="2">]]>&#13;&#10;</echo>
+		<echo file="${libfile}" encoding="UTF-8" append="true"><![CDATA[    <library name="Rainbow Library" systemlibrary="false">]]>&#13;&#10;</echo>
+		<importlib entry="lib/jdbc" />
+		<importlib entry="lib/jetty" />
+		<importlib entry="lib/test" />
+		<importlib entry="lib3rd" />
+		<importlib_src entry="lib" />
+		<echo file="${libfile}" encoding="UTF-8" append="true"><![CDATA[    </library>]]>&#13;&#10;</echo>
+		<echo file="${libfile}" encoding="UTF-8" append="true"><![CDATA[</eclipse-userlibraries>]]>&#13;&#10;</echo>
+		<echo>rainbow.userlibraries已生成在lib目录下，请刷新rainbow项目后导入</echo>
+	</target>
+
+</project>

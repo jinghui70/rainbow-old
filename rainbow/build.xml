@@ -1,0 +1,139 @@
+<project name="rainbow" default="build" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="version" value="3.0" />
+	<property environment="env" />
+	<property name="build_id" value="${env.BUILD_ID}" />
+	<property name="build_time" value="${env.BUILD_TIMESTAMP}" />
+
+	<property name="lib" location="lib" />
+	<property name="dist" location="../dist" />
+	<property name="dist.dev" location="${dist}/dev" />
+	<property name="dist.deploy" location="${dist}/deploy" />
+	<property name="build" location="${dist}/temp" />
+	<property name="report" location="${dist}/report" />
+
+	<path id="ant.classpath">
+		<fileset dir="build/ant">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<typedef resource="rainbow/ant/ant-rainbow.xml" classpathref="ant.classpath" />
+
+	<target name="clean">
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<!-- Create the time stamp -->
+		<tstamp>
+			<format property="DSTAMP" pattern="yyyy-MM-dd" />
+			<format property="TSTAMP" pattern="HH:mm:ss" />
+		</tstamp>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${dist}" />
+		<orderBundle property="bundles" dir=".." />
+		<filelist id="bundles" dir=".." files="${bundles}" />
+	</target>
+
+	<target name="pmd" depends="init" description="do pmd check">
+		<mkdir dir="${report}/pmd" />
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+		<subant target="pmd" genericantfile="common.xml" inheritall="true">
+			<path>
+				<pathelement location="../core" />
+				<filelist refid="bundles" />
+			</path>
+		</subant>
+	</target>
+
+	<macrodef name="build">
+		<attribute name="flag" />
+		<attribute name="failonerror" />
+		<sequential>
+			<mkdir dir="${dist}/@{flag}/lib" />
+			<mkdir dir="${dist}/@{flag}/bundle" />
+			<ant antfile="common.xml" target="build_@{flag}">
+				<property name="root" location="${dist}/@{flag}" />
+				<property name="dest" value="lib" />
+				<property name="basedir" value="../core" />
+			</ant>
+			<subant target="build_@{flag}" genericantfile="common.xml" inheritall="true" failonerror="@{failonerror}">
+				<property name="root" location="${dist}/@{flag}" />
+				<filelist refid="bundles" />
+			</subant>
+			<echo file="${dist}/@{flag}/version.txt" encoding="UTF-8">=== RAINBOW === &#13;&#10;Version:${version}.${build_id}&#13;&#10;Time:${build_time}</echo>
+			<delete dir="${build}" />
+		</sequential>
+	</macrodef>
+
+	<target name="deploy_dev" depends="init" description="build rainbow dev package">
+		<mkdir dir="${report}/junit" />
+		<build flag="dev" failonerror="true" />
+		<copy todir="${dist.dev}/lib">
+			<fileset dir="lib" />
+		</copy>
+		<copy todir="${dist.dev}/build" includeEmptyDirs="false">
+			<fileset dir="build" excludes="bin/*.*" />
+		</copy>
+	</target>
+
+	<target name="deploy" depends="init" description="build rainbow deploy package">
+		<build flag="deploy" failonerror="true" />
+		<ant antfile="common.xml" target="build_deploy">
+			<property name="root" location="${dist.deploy}" />
+			<property name="dest" value="lib" />
+			<property name="basedir" value="../bootstrap" />
+		</ant>
+		<delete dir="${build}" />
+		<copy todir="${dist.deploy}/bin">
+			<fileset dir="build/bin" />
+		</copy>
+		<copy todir="${dist.deploy}/lib">
+			<fileset dir="lib/jdbc" />
+			<fileset dir="lib" includes="*.jar" />
+		</copy>
+	</target>
+
+	<target name="javadoc" description="create java doc">
+		<delete dir="${dist}/javadoc" />
+		<javadoc destdir="${dist}/javadoc" author="true" charset="UTF-8" encoding="UTF-8" docencoding="UTF-8" version="true" use="true" windowtitle="Rainbow API" docfilessubdirs="yes" useexternalfile="yes">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+					<exclude name="src/*.jar" />
+				</fileset>
+				<fileset dir="build/ant">
+					<include name="jsr305-3.0.1.jar" />
+					<include name="j2objc-annotations-0.9.8.jar" />
+				</fileset>
+			</classpath>
+			<fileset dir="..">
+				<include name="**/src/rainbow/**/*.java" />
+				<exclude name="**/src/rainbow/**/Activator.java" />
+				<exclude name="ant-rainbow/**" />
+			</fileset>
+			<doctitle><![CDATA[<h1>Rainbow</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; BINGRONG All Rights Reserved.</i>]]></bottom>
+			<link href="http://docs.oracle.com/javase/8/docs/api/" />
+			<link href="http://google.github.io/guava/releases/19.0/api/docs/" />
+		</javadoc>
+	</target>
+
+	<target name="build" depends="pmd, deploy_dev, deploy" description="build all package">
+		<zip destfile="${dist}/dev.zip" basedir="${dist}" includes="dev/**" />
+		<zip destfile="${dist}/deploy.zip" basedir="${dist}" includes="deploy/**" />
+	</target>
+
+	<target name="jenkins" depends="build">
+		<delete dir="${dist}/dev" />
+		<delete dir="${dist}/deploy" />
+		<copy todir="${dist}/../../../userContent" overwrite="true">
+			<fileset dir="${dist}" includes="*.zip" />
+		</copy>
+	</target>
+
+</project>

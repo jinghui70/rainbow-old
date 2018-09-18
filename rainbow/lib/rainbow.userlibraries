@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<eclipse-userlibraries version="2">
+    <library name="Rainbow Library" systemlibrary="false">
+        <archive path="/rainbow/lib/jdbc/db2jcc4.jar" />
+        <archive path="/rainbow/lib/jdbc/h2-1.3.175.jar" />
+        <archive path="/rainbow/lib/jdbc/hive-jdbc-2.3.0.jar" />
+        <archive path="/rainbow/lib/jdbc/mysql-connector-java-5.1.27-bin.jar" />
+        <archive path="/rainbow/lib/jdbc/ojdbc6.jar" />
+        <archive path="/rainbow/lib/jdbc/sqljdbc4.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-continuation-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-http-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-io-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-security-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-server-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-servlet-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-util-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-webapp-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/jetty-xml-8.1.14.v20131031.jar" />
+        <archive path="/rainbow/lib/jetty/servlet-api-3.0.jar" />
+        <archive path="/rainbow/lib/test/hamcrest-core-1.3.jar" />
+        <archive path="/rainbow/lib/test/hamcrest-library-1.3.jar" />
+        <archive path="/rainbow/lib/test/jmock-2.6.0.jar" />
+        <archive path="/rainbow/lib/test/jmock-junit4-2.6.0.jar" />
+        <archive path="/rainbow/lib/test/junit-4.12.jar" />
+
+        <archive path="/rainbow/lib/commons-collections4-4.1.jar" source="/rainbow/lib/src/commons-collections4-4.1-sources.jar" />
+        <archive path="/rainbow/lib/druid-1.0.29.jar" source="/rainbow/lib/src/druid-1.0.29-sources.jar" />
+        <archive path="/rainbow/lib/fastjson-1.2.31.jar" source="/rainbow/lib/src/fastjson-1.2.31-sources.jar" />
+        <archive path="/rainbow/lib/guava-19.0.jar" source="/rainbow/lib/src/guava-19.0-sources.jar" />
+        <archive path="/rainbow/lib/joda-time-2.9.3.jar" source="/rainbow/lib/src/joda-time-2.9.3-sources.jar" />
+        <archive path="/rainbow/lib/logback-classic-1.1.3.jar" source="/rainbow/lib/src/logback-classic-1.1.3-sources.jar" />
+        <archive path="/rainbow/lib/logback-core-1.1.3.jar" source="/rainbow/lib/src/logback-core-1.1.3-sources.jar" />
+        <archive path="/rainbow/lib/poi-3.16.jar" source="/rainbow/lib/src/poi-3.16-sources.jar" />
+        <archive path="/rainbow/lib/poi-ooxml-3.16.jar" source="/rainbow/lib/src/poi-ooxml-3.16-sources.jar" />
+        <archive path="/rainbow/lib/poi-ooxml-schemas-3.16.jar" source="/rainbow/lib/src/poi-ooxml-schemas-3.16-sources.jar" />
+        <archive path="/rainbow/lib/poi-scratchpad-3.16.jar" source="/rainbow/lib/src/poi-scratchpad-3.16-sources.jar" />
+        <archive path="/rainbow/lib/slf4j-api-1.7.13.jar" source="/rainbow/lib/src/slf4j-api-1.7.13-sources.jar" />
+        <archive path="/rainbow/lib/xmlbeans-2.6.0.jar" source="/rainbow/lib/src/xmlbeans-2.6.0-sources.jar" />
+    </library>
+</eclipse-userlibraries>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<antlib>
+	<taskdef name="service" classname="rainbow.ant.Service" />
+	<taskdef name="orderBundle" classname="rainbow.ant.OrderBundle" />
+	<taskdef name="rdm" classname="rainbow.ant.rdm.Transform" />
+</antlib>

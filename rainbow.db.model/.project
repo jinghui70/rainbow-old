@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>rainbow.db.model</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/rainbow/template</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/rainbow/build/template</locationURI>
+		</link>
+		<link>
+			<name>src/rainbow/db/model</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/db/src/rainbow/db/model</locationURI>
+		</link>
+		<link>
+			<name>src/rainbow/core/util/XmlBinder.java</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/core/src/rainbow/core/util/XmlBinder.java</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="RDM Editor"
+            extensions="rdm"
+            icon="icons/rainbow.png"
+            contributorClass="rdm.editors.RDMEditorContributor"
+            class="rdm.editors.ModelEditor"
+            id="rdm.editors.ModelEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Rainbow Wizards"
+            id="rainbow">
+      </category>
+      <wizard
+            name="rainbow data model file"
+            icon="icons/rainbow.png"
+            category="rainbow"
+            class="rdm.wizards.NewRDMWizard"
+            id="rdm.wizards.NewRDMWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="rdm.preferences.PreferencePage"
+            id="rdm.preferences.PreferencePage"
+            name="Rainbow Data Model">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="rdm.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

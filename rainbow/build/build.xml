@@ -1,0 +1,139 @@
+<project name="base" default="all" basedir="..">
+	<property environment="env"/>
+	<property name="build_id" value="${env.BUILD_ID}" />
+	<property name="build_time" value="${env.BUILD_TIMESTAMP}" />
+
+	<!-- set global properties for this build -->
+	<property name="lib" location="lib" />
+	<property name="lib3rd" location="lib3rd" />
+	<property name="bundle" location="bundle" />
+
+	<property name="dist" location="../dist" />
+	<property name="dist.dev" location="${dist}/dev" />
+	<property name="dist.deploy" location="${dist}/deploy" />
+	<property name="dist.db" location="${dist}/db" />
+	
+	<property name="build" location="${dist}/temp" />
+	<property name="report" location="${dist}/report" />
+
+	<path id="ant.classpath">
+		<fileset dir="build/ant">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<typedef resource="rainbow/ant/ant-rainbow.xml" classpathref="ant.classpath" />
+
+	<target name="init">
+		<delete dir="${dist}" />
+		<mkdir dir="${dist}" />
+		<orderBundle property="bundles" dir=".." />
+		<filelist id="bundles" dir=".." files="${bundles}" />
+	</target>
+
+	<target name="pmd" depends="init" description="do pmd check">
+		<mkdir dir="${report}/pmd" />
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+		<subant target="pmd" genericantfile="build/common.xml" inheritall="true">
+			<filelist refid="bundles" />
+		</subant>
+		<delete>
+			<fileset dir="${report}/pmd" includes="*.html">
+				<size value="264" />
+			</fileset>
+		</delete>
+	</target>
+
+	<macrodef name="build">
+		<attribute name="flag" />
+		<attribute name="failonerror" />
+		<sequential>
+			<mkdir dir="${dist}/@{flag}/bundle" />
+			<subant target="build_@{flag}" genericantfile="build/common.xml" inheritall="true" failonerror="@{failonerror}">
+				<property name="root" location="${dist}/@{flag}" />
+				<filelist refid="bundles" />
+			</subant>
+			<delete dir="${build}" />
+		</sequential>
+	</macrodef>
+
+	<!-- buiild_dev for test -->
+	<target name="build_dev" depends="init">
+		<mkdir dir="${report}/junit" />
+		<build flag="dev" failonerror="false" />
+	</target>
+
+	<target name="javadoc" description="create javadoc">
+		<delete dir="${dist}/javadoc" />
+		<javadoc destdir="${dist}/javadoc" author="true" charset="UTF-8" encoding="UTF-8" docencoding="UTF-8" version="true" use="true" windowtitle="Service API" docfilessubdirs="yes" useexternalfile="yes">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib3rd}" erroronmissingdir="no"/>
+				<fileset dir="${bundle}" />
+				<fileset dir="build/ant">
+					<include name="jsr305-3.0.1.jar" />
+					<include name="j2objc-annotations-0.9.8.jar" />
+				</fileset>
+			</classpath>
+			<fileset dir="..">
+				<include name="*.api/src/**/*.java" />
+				<include name="**/src/**/api/**/*.java" />
+			</fileset>
+			<doctitle><![CDATA[<h1>Rainbow</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; Rainbow  All Rights Reserved.</i>]]></bottom>
+			<link href="http://localhost/jenkins/job/rainbow/javadoc/" />
+			<link href="http://docs.oracle.com/javase/8/docs/api/" />
+			<link href="http://google.github.io/guava/releases/19.0/api/docs/" />
+		</javadoc>
+	</target>
+
+	<!-- prepare deploy -->
+	<target name="deploy" depends="init" description="make deploy">
+		<build flag="deploy" failonerror="true" />
+		<unzip src="deploy/deploy.zip" dest="${dist}" encoding="GBK" />
+		<echo file="${dist.deploy}/version.txt" encoding="UTF-8" append="true">&#13;&#10;&#13;&#10;=== ${PRODUCT} === &#13;&#10;Version: ${version}.${build_id}&#13;&#10;Time: ${build_time}</echo>
+		<copy todir="${dist.deploy}/conf">
+			<fileset dir="conf" />
+		</copy>
+		<copy todir="${dist.deploy}/lib">
+			<fileset dir="${lib3rd}" />
+		</copy>
+		<copy todir="${dist.deploy}/lib">
+			<fileset dir="lib/jetty" />
+		</copy>
+		<antcall target="deploy_db_xml" />
+	</target>
+	
+	<!-- 如果需要，替换数据库配置 -->
+	<available file="deploy/database.xml" type="file" property="db.xml.present" />
+	<target name="deploy_db_xml" if="db.xml.present">
+		<copy tofile="${dist.deploy}/conf/db/database.xml" file="deploy/database.xml" overwrite="true" />
+	</target>
+
+	<!-- 各项目自己负责自己的db，注释起来的部分是写法例子
+	<target name="db" description="create db related files">
+		<delete dir="${dist}/db" />
+		<mkdir dir="${dist}/db" />
+
+		<rdm todir="${dist}/db" templateDir="build/template">
+			<template name="H2" />
+			<template name="Oracle">
+				<param name="tableSpace" value="suibian" />
+			</template>
+			<template name="html" suffix="html" />
+			<fileset dir="conf/db" includes="*.rdm" />
+			<initdata name="TEST.sql" dir="deploy/测试数据" load="true" />
+			<initdata name="INIT.sql" dir="deploy/初始数据" />
+		</rdm>
+	</target> -->
+
+	<target name="all" depends="pmd,build_dev,deploy" description="build all package">
+		<delete dir="${dist}/dev" />
+	</target>
+	
+</project>

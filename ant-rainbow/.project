@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ant-rainbow</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/rainbow/db/model</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/db/src/rainbow/db/model</locationURI>
+		</link>
+		<link>
+			<name>src/rainbow/core/bundle/BundleData.java</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/core/src/rainbow/core/bundle/BundleData.java</locationURI>
+		</link>
+		<link>
+			<name>src/rainbow/core/util/XmlBinder.java</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/core/src/rainbow/core/util/XmlBinder.java</locationURI>
+		</link>
+		<link>
+			<name>src/rainbow/core/model/object/INameObject.java</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/core/src/rainbow/core/model/object/INameObject.java</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

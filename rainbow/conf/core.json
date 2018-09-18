@@ -1,0 +1,12 @@
+{
+  "core": {
+    "id": 0,
+    // "jmxPort": 1109,
+    "products": {
+    //     "rainbow": "rainbow"
+    },
+  },
+  "service": {
+  	// "session": "USER"
+  }
+}
