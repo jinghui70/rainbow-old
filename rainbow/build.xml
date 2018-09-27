@@ -1,6 +1,6 @@
 <project name="rainbow" default="build" basedir=".">
 	<!-- set global properties for this build -->
-	<property name="version" value="3.0" />
+	<property name="version" value="2.0" />
 	<property environment="env" />
 	<property name="build_id" value="${env.BUILD_ID}" />
 	<property name="build_time" value="${env.BUILD_TIMESTAMP}" />
